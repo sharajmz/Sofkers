@@ -23,6 +23,8 @@ builder.Services.AddScoped<IServiceQueueBus, ServiceQueueBusSofkerStadistics>();
 
 builder.Services.AddSingleton(_ => builder.Configuration);
 
+builder.Services.AddHostedService<WorkerQueueBusSofkerStadistics>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
