@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 
 namespace Application
 {
-    public class ServiceQueueBusSofkerStadistics : IServiceQueueBus
+    public class ServiceQueueBusSofkerStatistics : IServiceQueueBus
     {
         private ServiceBusClient _serviceQueueBus;
         public String storageAccountConnection;
         private readonly IConfiguration _configuration;
 
-        public ServiceQueueBusSofkerStadistics(IConfiguration configuration)
+        public ServiceQueueBusSofkerStatistics(IConfiguration configuration)
         {
             _configuration = configuration;
             _serviceQueueBus = new ServiceBusClient(_configuration.GetSection("ConnectionStorageAccount").Value);

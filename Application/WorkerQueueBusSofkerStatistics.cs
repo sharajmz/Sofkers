@@ -1,30 +1,33 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using Application.Interfaces;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 namespace Application
 {
-    public class WorkerQueueBusSofkerStadistics : BackgroundService
+    public class WorkerQueueBusSofkerStatistics : BackgroundService
     {
         private readonly IConfiguration _configuration;
         private ServiceBusClient _serviceQueueBus;
         private List<string> _queueMessages = new List<string>();
+        private IAdapterSofkerStatistic _adapterSofkerStatistic;
 
-        public WorkerQueueBusSofkerStadistics(IConfiguration configuration)
+        public WorkerQueueBusSofkerStatistics(IConfiguration configuration, IAdapterSofkerStatistic adapterSofkerStatistic)
         {
             _configuration = configuration;
             _serviceQueueBus = new ServiceBusClient(_configuration.GetSection("ConnectionStorageAccount").Value);
+            _adapterSofkerStatistic = adapterSofkerStatistic;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 await ReceiveMessageAsync();
-                await Task.Delay(100, stoppingToken);
+                await Task.Delay(4000, stoppingToken);
             }
         }
 
-        private async Task<List<string>> ReceiveMessageAsync()
+        private async Task ReceiveMessageAsync()
         {
             try
             {
@@ -34,13 +37,15 @@ namespace Application
                 await processor.StartProcessingAsync();
                 Thread.Sleep(3000);
                 await processor.StopProcessingAsync();
-                return _queueMessages;
+                if(await _adapterSofkerStatistic.InsertSofkertChangesLog(_queueMessages))
+                {
+                    _queueMessages.Clear();
+                }
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($" Exception Throwed {ex.Message}");
-                return _queueMessages = new List<string>();
             }
 
         }

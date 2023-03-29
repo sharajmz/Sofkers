@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.Interfaces;
+using Infrastructure.Data.Adapters;
 using Infrastructure.Data.Context;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +20,14 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IServiceQueueBus, ServiceQueueBusSofkerStadistics>();
+builder.Services.AddSingleton<SofkaStatisticsDbContext>();
+
+builder.Services.AddSingleton<IServiceQueueBus, ServiceQueueBusSofkerStatistics>();
+builder.Services.AddSingleton<IAdapterSofkerStatistic, AdapterSofkerStatistic>();
 
 builder.Services.AddSingleton(_ => builder.Configuration);
 
-builder.Services.AddHostedService<WorkerQueueBusSofkerStadistics>();
+builder.Services.AddHostedService<WorkerQueueBusSofkerStatistics>();
 
 var app = builder.Build();
 
