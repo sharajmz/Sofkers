@@ -20,7 +20,7 @@ namespace Infrastructure.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var configurationSection = Configuration.GetConnectionString("ConnectionStrings:PeopleDevSofkaContext") ?? throw new InvalidOperationException("Connection string 'PeopleDevSofkaContext' not found.");
+            var configurationSection = Configuration.GetConnectionString("PeopleDevSofkaContext") ?? throw new InvalidOperationException("Connection string 'PeopleDevSofkaContext' not found.");
             services.AddDbContext<PeopleDevSofkaContext>(options => options.UseSqlServer(configurationSection));
 
             services.AddControllers().AddJsonOptions(x =>
