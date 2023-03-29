@@ -17,7 +17,7 @@ namespace Domain.Entities
 
         [Key]
         public int IdentificationId { get; set; }
-        public string? Identification { get; set; }
+        public string Identification { get; set; }
 
         public virtual ICollection<Sofker> Sofkers { get; set; }
     }
