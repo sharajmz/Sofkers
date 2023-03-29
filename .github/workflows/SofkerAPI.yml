@@ -1,16 +1,16 @@
-name: Compile e implemente la aplicación de .NET Core en la aplicación web InfrastructureAPI20230329000543 con el servicio API Management SofkerWebAPI-SofkerAPI
+name: Compile e implemente la aplicación de .NET Core en la aplicación web SofkerAPI con el servicio API Management InfrastructureAPIapi-InfrastructureAPI
 on:
   push:
     branches:
     - develop
 env:
-  AZURE_WEBAPP_NAME: InfrastructureAPI20230329000543
+  AZURE_WEBAPP_NAME: SofkerAPI
   AZURE_WEBAPP_PACKAGE_PATH: Infrastructure.API\publish
   AZURE_APIM_RESOURCE_PATH: /
   AZURE_APIM_RESOURCEGROUP: Sofka_project
-  AZURE_APIM_SERVICENAME: SofkerWebAPI
-  AZURE_APIM_API_ID: SofkerAPI
-  AZURE_APIM_APPSERVICEURL: https://infrastructureapi20230329000543.azurewebsites.net
+  AZURE_APIM_SERVICENAME: InfrastructureAPIapi
+  AZURE_APIM_API_ID: InfrastructureAPI
+  AZURE_APIM_APPSERVICEURL: https://sofkerapi.azurewebsites.net
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 5.6.3
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: Infrastructure.API\publish\swagger.json
@@ -64,11 +64,11 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.InfrastructureAPI20230329000543_BA1B }}
+        publish-profile: ${{ secrets.SofkerAPI_1AA0 }}
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.SofkerWebAPI_SPN }}
+        creds: ${{ secrets.InfrastructureAPIapi_SPN }}
     - name: Import API into Azure API Management
       run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{ env.API_IMPORT_SPECIFICATION_PATH }}" --specification-format OpenApi --subscription-required false
     - name: logout
